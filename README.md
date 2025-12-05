@@ -40,3 +40,7 @@ We use [Biome](https://biomejs.dev/) for linting, formatting, and import sorting
 npm run lint        # Check for lint/format issues
 npm run lint:fix    # Fix auto-fixable issues (format, sort imports, safe lint fixes)
 ```
+
+## Testing
+
+See [docs/testing.md](docs/testing.md) for test coverage and strategy.

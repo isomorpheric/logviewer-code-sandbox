@@ -9,14 +9,14 @@ Refer to `docs/acceptance_criteria.md` for Acceptance Criteria and Constraints.
 - [x] `ndjsonParser`: chunked boundaries, bad lines skipped
 - [x] `useLogStream`: incremental emission, abort/retry paths
 - [x] Date formatting (ISO 8601)
-- [ ] `LogTable` behaviors: expansion toggles, keyboard nav, copy/paste action
-- [ ] Include notes section for future coverage
+- [x] `LogTable` behaviors: expansion toggles, copy/paste action (keyboard nav deferred - feature not implemented)
+- [x] Include notes section for future coverage (see `docs/testing.md`)
 
 #### Two-column table
 - [x] Render `Time` and `Event` columns only
 - [x] Normalize `_time` to ISO 8601 via shared `dateFormatter`
 - [x] Render event column as stable, single-line JSON (`JSON.stringify(event)`)
-- [ ] Truncate/tooltip long values; keep raw string copyable
+- ~~Truncate/tooltip long values~~ (out of scope - CSS truncation sufficient)
 
 #### Expand/collapse rows
 - [x] Track `isExpanded` per row; toggle via click or Enter/Space
