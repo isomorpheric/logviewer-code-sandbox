@@ -50,6 +50,11 @@
       }
     }
   },
+  "json": {
+    "parser": {
+      "allowComments": true
+    }
+  },
   "javascript": {
     "formatter": {
       "quoteStyle": "double",
