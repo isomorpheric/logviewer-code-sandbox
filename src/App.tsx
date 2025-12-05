@@ -1,9 +1,11 @@
+import { LogTable } from "@/components/LogTable";
 import styles from "./App.module.css";
+import { mockLogs } from "./tests/fixtures/logEntries";
 
 function App() {
   return (
     <main className={styles.root}>
-      <h1 className={styles.title}>Clean Slate 🧼 </h1>
+      <LogTable logs={mockLogs} width="80%" height="66dvh" />
     </main>
   );
 }

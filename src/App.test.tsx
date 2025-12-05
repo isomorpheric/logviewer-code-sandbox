@@ -8,8 +8,8 @@ describe("App", () => {
     expect(screen.getByRole("main")).toBeInTheDocument();
   });
 
-  it("shows a top-level heading", () => {
+  it("renders the log table", () => {
     render(<App />);
-    expect(screen.getByRole("heading", { level: 1 })).toBeInTheDocument();
+    expect(screen.getByRole("grid", { name: "Log Table" })).toBeInTheDocument();
   });
 });

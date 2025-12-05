@@ -73,6 +73,7 @@ Lightweight, performance-focused React application using Vite. Rely on custom ho
 - Use absolute positioning or transform translations for rows.
 - Support variable height with dynamic measurement via `useLayoutEffect`.
 - Attach `ResizeObserver` to recompute viewport height, column widths, and visible window on resize.
+- **Note**: When implementing virtualization, consider switching from fixed CSS column widths (e.g., `200px`) to dynamic JS-based sizing (using `ResizeObserver`) to handle viewport changes and responsive layouts more robustly.
 
 ### C. Log Rows & Interaction
 

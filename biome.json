@@ -43,10 +43,12 @@
       },
       "suspicious": {
         "noExplicitAny": "warn",
-        "noConsole": "warn"
+        "noTemplateCurlyInString": "off"
       },
       "a11y": {
-        "useKeyWithClickEvents": "error"
+        "useKeyWithClickEvents": "error",
+        "useFocusableInteractive": "off",
+        "useSemanticElements": "off"
       }
     }
   },

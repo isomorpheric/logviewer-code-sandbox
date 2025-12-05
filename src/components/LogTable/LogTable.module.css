@@ -1,0 +1,12 @@
+.root {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--clr-surface-a30);
+  background-color: var(--clr-surface-a0);
+  --col-time-width: 200px;
+}
+
+.listContainer {
+  flex: 1;
+  overflow-y: auto;
+}
