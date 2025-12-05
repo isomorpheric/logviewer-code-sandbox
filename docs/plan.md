@@ -2,33 +2,57 @@
 
 Refer to `docs/acceptance_criteria.md` for Acceptance Criteria and Constraints.
 
-### Implementation
+### Implementation Status
 
 #### Tests
-- Vitest + RTL coverage
-- `ndjsonParser`: chunked boundaries, bad lines skipped
-- `useLogStream`: incremental emission, abort/retry paths
-- Date formatting (ISO 8601)
-- `LogTable` behaviors: expansion toggles, keyboard nav, copy/paste action
-- Include notes section for future coverage
+- [x] Vitest + RTL coverage
+- [x] `ndjsonParser`: chunked boundaries, bad lines skipped
+- [x] `useLogStream`: incremental emission, abort/retry paths
+- [x] Date formatting (ISO 8601)
+- [ ] `LogTable` behaviors: expansion toggles, keyboard nav, copy/paste action
+- [ ] Include notes section for future coverage
 
 #### Two-column table
-- Render `Time` and `Event` columns only
-- Normalize `_time` to ISO 8601 via shared `dateFormatter`
-- Render event column as stable, single-line JSON (`JSON.stringify(event)`)
-- Truncate/tooltip long values; keep raw string copyable
+- [x] Render `Time` and `Event` columns only
+- [x] Normalize `_time` to ISO 8601 via shared `dateFormatter`
+- [x] Render event column as stable, single-line JSON (`JSON.stringify(event)`)
+- [ ] Truncate/tooltip long values; keep raw string copyable
 
 #### Expand/collapse rows
-- Track `isExpanded` per row; toggle via click or Enter/Space
-- Pretty-print expanded view with `JSON.stringify(event, null, 2)`
-- Ensure virtualization handles changing height
-- "Copy" Button for single-line and full pretty JSON
+- [x] Track `isExpanded` per row; toggle via click or Enter/Space
+- [x] Pretty-print expanded view with `JSON.stringify(event, null, 2)`
+- [x] Ensure virtualization handles changing height
+- [x] "Copy" Button for single-line and full pretty JSON
 
 #### Streaming NDJSON + TTFB
-- Use `useLogStream(url)` to consume response body stream
-- Parse NDJSON incrementally; push events to state immediately
-- Render rows without waiting for full download
-- Show status for bytes loaded and errors; keep retry/abort controls responsive
+- [x] Use `useLogStream(url)` to consume response body stream
+- [x] Parse NDJSON incrementally; push events to state immediately
+- [x] Render rows without waiting for full download
+- [x] Show status for bytes loaded and errors; keep retry/abort controls responsive
+
+#### Virtualization
+- [x] `useVirtualization` hook with scroll/height tracking
+- [x] Variable row heights via height map and ResizeObserver
+- [x] Overscan for smooth scrolling
+- [x] Integrate into `LogList` component
+
+#### Performance Metrics (TTFR)
+- [x] `src/utils/performanceMarks.ts` - centralized Performance API marks
+- [x] `PerformanceMetricsProvider` context for cross-cutting metrics
+- [x] `usePerformanceMetrics` hook for consuming TTFR
+- [x] TTFR displayed in StatusBar
+
+#### StatusBar Component
+- [x] Display TTFR (Time to First Render)
+- [x] Display bytes loaded / total bytes
+- [x] Display progress percentage with visual indicator
+- [x] Display log count
+- [x] Display loading/error status
+- [x] Abort/Retry action buttons
+
+#### Card UI Component
+- [x] Reusable Card component with theme variables
+- [x] Configurable padding (none, sm, md, lg)
 
 ## 1. Architecture & Setup
 
@@ -123,3 +147,10 @@ Lightweight, performance-focused React application using Vite. Rely on custom ho
 3. **Substring Search (Bonus)**: Add a lightweight filter bar before virtualization; debounce input and filter against single-line JSON strings.
 4. **Error Boundaries**: Wrap the list to catch JSON parse errors gracefully.
 5. **User Preferences**: Persist options like "Wrap Lines" or "Dark Mode" in `localStorage` if included.
+
+
+## 5. Things I'd like to add if I have extra time:
+
+- Error context for failed json lines, so they get saved and we can get them.
+- ExpandedRows context so that when you expand a row, scroll it off screen and then back to it,
+the open state is preserved. Currently it remounts in default state.

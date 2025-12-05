@@ -1,0 +1,20 @@
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--clr-surface-a30) 25%,
+    var(--clr-surface-a20) 50%,
+    var(--clr-surface-a30) 75%
+  );
+  background-size: 200% 100%;
+  border-radius: var(--radius);
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}

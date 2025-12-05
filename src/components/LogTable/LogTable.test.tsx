@@ -1,5 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
+import { PerformanceMetricsProvider } from "@/contexts";
 import type { LogEntry } from "@/types";
 import { LogTable } from "./LogTable";
 
@@ -8,9 +9,13 @@ const mockLogs: LogEntry[] = [
   { _time: 1627890001000, message: "Log 2" }, // 2021-08-02T07:40:01.000Z
 ];
 
+const renderWithProvider = (ui: React.ReactElement) => {
+  return render(<PerformanceMetricsProvider>{ui}</PerformanceMetricsProvider>);
+};
+
 describe("LogTable", () => {
   it("renders logs and headers", () => {
-    render(<LogTable logs={mockLogs} />);
+    renderWithProvider(<LogTable logs={mockLogs} />);
     expect(screen.getByText("Time")).toBeInTheDocument();
     expect(screen.getByText("Event")).toBeInTheDocument();
     expect(screen.getByText(/Log 1/)).toBeInTheDocument();
@@ -18,15 +23,16 @@ describe("LogTable", () => {
   });
 
   it("renders empty state correctly with headers", () => {
-    render(<LogTable logs={[]} />);
+    renderWithProvider(<LogTable logs={[]} />);
     const grid = screen.getByRole("grid");
     expect(grid).toBeInTheDocument();
     expect(screen.getByText("Time")).toBeInTheDocument();
   });
 
   it("applies custom width and height", () => {
-    render(<LogTable logs={[]} width={800} height="500px" />);
+    renderWithProvider(<LogTable logs={[]} width={800} height="500px" />);
     const grid = screen.getByRole("grid");
-    expect(grid).toHaveStyle({ width: "800px", height: "500px" });
+    // Width/height is on the Card wrapper, not the grid
+    expect(grid.parentElement).toHaveStyle({ width: "800px", height: "500px" });
   });
 });

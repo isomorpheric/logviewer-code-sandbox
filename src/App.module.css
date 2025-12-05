@@ -4,6 +4,8 @@
   height: 100dvh;
   justify-content: center;
   align-items: center;
+  gap: 16px;
+  padding: 16px;
 }
 
 .title {

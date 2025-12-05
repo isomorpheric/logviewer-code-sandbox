@@ -2,6 +2,8 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <!-- Early connection to S3 for log file fetch - does DNS pre-resolution, TCP and TLS handshakes preemptively -->
+    <link rel="preconnect" href="https://s3.amazonaws.com" />
     <link rel="icon" type="image/svg+xml" href="/goat.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Logviewer</title>

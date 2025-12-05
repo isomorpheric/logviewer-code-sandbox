@@ -2,6 +2,11 @@
   border-bottom: 1px solid var(--clr-surface-a30);
   font-family: monospace;
   font-size: 12px;
+  background-color: var(--clr-surface-a0);
+}
+
+.rowEven {
+  background-color: var(--clr-row-alt);
 }
 
 .summary {

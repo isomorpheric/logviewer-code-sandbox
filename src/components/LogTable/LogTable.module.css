@@ -1,12 +1,14 @@
+.cardWrapper {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
 .root {
   display: flex;
   flex-direction: column;
-  border: 1px solid var(--clr-surface-a30);
+  flex: 1;
+  min-height: 0;
   background-color: var(--clr-surface-a0);
   --col-time-width: 200px;
-}
-
-.listContainer {
-  flex: 1;
-  overflow-y: auto;
 }

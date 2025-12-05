@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { LogEntry } from "@/types";
+import { perf } from "@/utils";
 import { parseNDJSONChunk } from "./ndjsonParser";
 
 interface UseLogStreamResult {
@@ -30,6 +31,7 @@ export function useLogStream(url: string): UseLogStreamResult {
     const controller = new AbortController();
     abortControllerRef.current = controller;
 
+    perf.start();
     setIsLoading(true);
     setError(null);
     setLoadedBytes(0);
@@ -96,10 +98,16 @@ export function useLogStream(url: string): UseLogStreamResult {
   const readStream = useCallback(
     async (reader: ReadableStreamDefaultReader<Uint8Array>) => {
       const decoder = new TextDecoder();
+      let isFirstChunk = true;
 
       while (true) {
         const { done, value } = await reader.read();
         if (done) break;
+
+        if (isFirstChunk) {
+          perf.firstByte();
+          isFirstChunk = false;
+        }
 
         setLoadedBytes((prev) => prev + value.byteLength);
         const chunk = decoder.decode(value, { stream: true });

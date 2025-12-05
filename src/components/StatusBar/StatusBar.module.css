@@ -1,0 +1,100 @@
+.statusBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  font-size: 13px;
+  font-family: system-ui, -apple-system, sans-serif;
+}
+
+.metrics {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.metric {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.label {
+  color: var(--clr-primary-a10);
+  font-weight: bold;
+  font-size: 12px;
+}
+
+.value {
+  color: var(--app-text);
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+
+.progressBar {
+  width: 60px;
+  height: 6px;
+  background-color: var(--clr-surface-a30);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+  background-color: var(--clr-primary-a0);
+  transition: width var(--transition);
+}
+
+.status {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--clr-info-a10);
+}
+
+.loadingDot {
+  width: 8px;
+  height: 8px;
+  background-color: var(--clr-info-a10);
+  border-radius: 50%;
+  animation: pulse 1s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.4;
+  }
+}
+
+.error {
+  color: var(--clr-danger-a10);
+}
+
+.actions {
+  display: flex;
+  gap: 8px;
+}
+
+.button {
+  padding: 4px 12px;
+  background-color: var(--clr-surface-a10);
+  border: 1px solid var(--clr-surface-a40);
+  border-radius: 4px;
+  color: var(--app-text);
+  font-size: 12px;
+  cursor: pointer;
+  transition: background-color var(--transition);
+}
+
+.button:hover {
+  background-color: var(--clr-surface-a20);
+}
+
+.button:active {
+  background-color: var(--clr-surface-a30);
+}

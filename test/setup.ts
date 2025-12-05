@@ -1,6 +1,15 @@
 import "@testing-library/jest-dom";
 import { cleanup } from "@testing-library/react";
-import { afterEach } from "vitest";
+import { afterEach, vi } from "vitest";
+
+// Mock ResizeObserver for virtualization tests
+class ResizeObserverMock {
+  observe = vi.fn();
+  unobserve = vi.fn();
+  disconnect = vi.fn();
+}
+
+globalThis.ResizeObserver = ResizeObserverMock;
 
 // Ensure cleanup after each test to avoid cross-test pollution
 afterEach(() => {

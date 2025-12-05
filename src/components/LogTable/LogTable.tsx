@@ -1,23 +1,23 @@
+import { Card } from "@/components/ui/Card";
 import type { LogEntry } from "@/types";
-import { LogRow } from "./LogRow";
+import { LogList } from "./LogList";
 import styles from "./LogTable.module.css";
 import { LogTableHeader } from "./LogTableHeader";
 
 interface Props {
   logs: LogEntry[];
+  isLoading?: boolean;
   width?: string | number;
   height?: string | number;
 }
 
-export const LogTable = ({ logs, width = "100%", height = "100%" }: Props) => {
+export const LogTable = ({ logs, isLoading = false, width = "100%", height = "100%" }: Props) => {
   return (
-    <div role="grid" aria-label="Log Table" className={styles.root} style={{ width, height }}>
-      <LogTableHeader />
-      <div role="rowgroup" className={styles.listContainer}>
-        {logs.map((log, index) => (
-          <LogRow key={`${log._time}-${index}`} log={log} />
-        ))}
+    <Card padding="none" className={styles.cardWrapper} style={{ width, height }}>
+      <div role="grid" aria-label="Log Table" className={styles.root}>
+        <LogTableHeader />
+        <LogList logs={logs} isLoading={isLoading} />
       </div>
-    </div>
+    </Card>
   );
 };

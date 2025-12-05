@@ -1,0 +1,21 @@
+.card {
+  background-color: var(--clr-surface-a0);
+  border: 1px solid var(--clr-surface-a30);
+  border-radius: var(--radius);
+}
+
+.padding-none {
+  padding: 0;
+}
+
+.padding-sm {
+  padding: 8px;
+}
+
+.padding-md {
+  padding: 16px;
+}
+
+.padding-lg {
+  padding: 24px;
+}
