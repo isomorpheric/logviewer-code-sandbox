@@ -1,20 +1,22 @@
 import { ErrorBoundary } from "react-error-boundary";
 import { LogTable } from "@/components/LogTable";
 import { StatusBar } from "@/components/StatusBar";
+import { Timeline } from "@/components/Timeline";
 import { ErrorFallback } from "@/components/ui/ErrorFallback";
 import { PerformanceMetricsProvider } from "@/contexts";
 import { useLogStream } from "@/hooks";
 import styles from "./App.module.css";
 
 function App() {
-  const { logs, isLoading, error, loadedBytes, totalBytes, abort, retry } = useLogStream(
-    import.meta.env.VITE_LOG_FILE_URL
-  );
+  const { logs, isLoading, error, loadedBytes, totalBytes, abort, retry, isComplete } =
+    useLogStream(import.meta.env.VITE_LOG_FILE_URL);
 
   return (
     <PerformanceMetricsProvider>
       <main className={styles.root}>
         <ErrorBoundary FallbackComponent={ErrorFallback}>
+          <Timeline logs={logs} bucketCount={5} isLoading={!isComplete} />
+          <LogTable logs={logs} isLoading={isLoading} />
           <StatusBar
             loadedBytes={loadedBytes}
             totalBytes={totalBytes}
@@ -24,7 +26,6 @@ function App() {
             onAbort={abort}
             onRetry={retry}
           />
-          <LogTable logs={logs} isLoading={isLoading} width="80%" height="66dvh" />
         </ErrorBoundary>
       </main>
     </PerformanceMetricsProvider>

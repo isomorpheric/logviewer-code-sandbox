@@ -11,6 +11,7 @@ interface UseLogStreamResult {
   totalBytes: number | null;
   abort: () => void;
   retry: () => void;
+  isComplete: boolean;
 }
 
 export function useLogStream(url: string): UseLogStreamResult {
@@ -19,6 +20,7 @@ export function useLogStream(url: string): UseLogStreamResult {
   const [error, setError] = useState<Error | null>(null);
   const [loadedBytes, setLoadedBytes] = useState(0);
   const [totalBytes, setTotalBytes] = useState<number | null>(null);
+  const [isComplete, setIsComplete] = useState(false);
 
   const abortControllerRef = useRef<AbortController | null>(null);
   const bufferRef = useRef<string>("");
@@ -36,6 +38,7 @@ export function useLogStream(url: string): UseLogStreamResult {
     setError(null);
     setLoadedBytes(0);
     setTotalBytes(null);
+    setIsComplete(false);
     setLogs([]);
     bufferRef.current = "";
 
@@ -124,6 +127,7 @@ export function useLogStream(url: string): UseLogStreamResult {
       const reader = await fetchLogStream(controller.signal);
       await readStream(reader);
       flushRemainingBuffer();
+      setIsComplete(true);
     } catch (err) {
       const wasAborted = handleStreamError(err);
       if (wasAborted) return;
@@ -153,5 +157,5 @@ export function useLogStream(url: string): UseLogStreamResult {
     streamLogs();
   }, [streamLogs]);
 
-  return { logs, isLoading, error, loadedBytes, totalBytes, abort, retry };
+  return { logs, isLoading, error, loadedBytes, totalBytes, abort, retry, isComplete };
 }

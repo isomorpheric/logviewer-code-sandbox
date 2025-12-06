@@ -1,0 +1,127 @@
+.container {
+  display: flex;
+  width: 100%;
+  background: var(--clr-surface-a10);
+  border: 1px solid var(--clr-surface-a30);
+  border-radius: var(--radius);
+  padding: 1rem;
+  gap: 0.5rem;
+}
+
+.empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  color: var(--clr-surface-a50);
+  font-size: 0.875rem;
+}
+
+/* Y-Axis */
+.yAxis {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding-bottom: 2.5rem; /* Space for X-axis labels */
+  min-width: 3.5rem;
+  text-align: right;
+  padding-right: 0.5rem;
+}
+
+.yTick {
+  font-size: 0.75rem;
+  color: var(--app-text);
+  opacity: 0.7;
+  line-height: 1;
+}
+
+/* Chart Area */
+.chartArea {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0; /* Allow shrinking */
+  position: relative;
+}
+
+/* Grid Lines */
+.gridLines {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 2.5rem; /* Exclude x-axis */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  pointer-events: none;
+}
+
+.gridLine {
+  height: 1px;
+  background: var(--clr-surface-a30);
+  opacity: 0.3;
+}
+
+/* Bars */
+.bars {
+  flex: 1;
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;
+  border-bottom: 1px solid var(--clr-surface-a30);
+  position: relative;
+}
+
+.barColumn {
+  flex: 1;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  height: 100%;
+}
+
+.bar {
+  width: 80%;
+  max-width: 60px;
+  background: var(--app-accent);
+  border-radius: 2px 2px 0 0;
+  transition: opacity var(--transition);
+  min-height: 1px; /* Ensure visibility even for small counts */
+  cursor: pointer;
+  /* Reset button styles */
+  border: none;
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  color: inherit;
+  outline: none;
+}
+
+.bar:hover {
+  opacity: 0.8;
+}
+
+.bar:focus-visible {
+  outline: 2px solid var(--app-accent);
+  outline-offset: 2px;
+}
+
+/* X-Axis */
+.xAxis {
+  display: flex;
+  padding-top: 0.5rem;
+  gap: 2px;
+  justify-content: space-between;
+}
+
+.xTick {
+  flex: 1;
+  font-size: 0.625rem;
+  color: var(--app-text);
+  opacity: 0.7;
+  text-align: center;
+  writing-mode: horizontal-tb;
+  transform-origin: center;
+  min-width: 0;
+}

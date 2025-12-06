@@ -1,0 +1,29 @@
+.tooltip {
+  position: fixed;
+  pointer-events: none;
+  z-index: 1000;
+  transform: translate(-50%, -100%);
+  margin-top: -8px;
+}
+
+.tooltipCard {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  white-space: nowrap;
+}
+
+.tooltipContent {
+  display: flex;
+  align-items: baseline;
+  gap: 0.25rem;
+  font-size: 0.875rem;
+}
+
+.count {
+  font-weight: 600;
+  color: var(--app-text);
+}
+
+.label {
+  color: var(--clr-surface-a70);
+  font-size: 0.8125rem;
+}
