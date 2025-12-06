@@ -6,7 +6,7 @@ describe("App integration", () => {
   it("renders the application without crashing", async () => {
     render(<App />);
     await waitFor(() => {
-    expect(screen.getByRole("main")).toBeInTheDocument();
+      expect(screen.getByRole("main")).toBeInTheDocument();
     });
   });
 });

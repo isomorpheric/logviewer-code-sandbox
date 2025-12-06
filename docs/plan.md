@@ -2,155 +2,85 @@
 
 Refer to `docs/acceptance_criteria.md` for Acceptance Criteria and Constraints.
 
-### Implementation Status
+## 1. Completed Features
 
-#### Tests
+### Core & Architecture
 - [x] Vitest + RTL coverage
 - [x] `ndjsonParser`: chunked boundaries, bad lines skipped
 - [x] `useLogStream`: incremental emission, abort/retry paths
 - [x] Date formatting (ISO 8601)
-- [x] `LogTable` behaviors: expansion toggles, copy/paste action (keyboard nav deferred - feature not implemented)
-- [x] Include notes section for future coverage (see `docs/testing.md`)
+- [x] `src/utils/performanceMarks.ts` - centralized Performance API marks
+- [x] `PerformanceMetricsProvider` context for cross-cutting metrics
+- [x] `usePerformanceMetrics` hook for consuming TTFR
 
-#### Two-column table
-- [x] Render `Time` and `Event` columns only
+### Log Table & Virtualization
+- [x] `LogTable` behaviors: expansion toggles, copy/paste action
+- [x] Two-column layout: `Time` and `Event`
 - [x] Normalize `_time` to ISO 8601 via shared `dateFormatter`
 - [x] Render event column as stable, single-line JSON (`JSON.stringify(event)`)
-- ~~Truncate/tooltip long values~~ (out of scope - CSS truncation sufficient)
-
-#### Expand/collapse rows
 - [x] Track `isExpanded` per row; toggle via click or Enter/Space
 - [x] Pretty-print expanded view with `JSON.stringify(event, null, 2)`
-- [x] Ensure virtualization handles changing height
 - [x] "Copy" Button for single-line and full pretty JSON
+- [x] `useVirtualization` hook with scroll/height tracking
+- [x] Variable row heights via height map and ResizeObserver
+- [x] Overscan for smooth scrolling
 
-#### Streaming NDJSON + TTFB
+### Streaming & UX
 - [x] Use `useLogStream(url)` to consume response body stream
 - [x] Parse NDJSON incrementally; push events to state immediately
 - [x] Render rows without waiting for full download
 - [x] Show status for bytes loaded and errors; keep retry/abort controls responsive
-
-#### Virtualization
-- [x] `useVirtualization` hook with scroll/height tracking
-- [x] Variable row heights via height map and ResizeObserver
-- [x] Overscan for smooth scrolling
-- [x] Integrate into `LogList` component
-
-#### Performance Metrics (TTFR)
-- [x] `src/utils/performanceMarks.ts` - centralized Performance API marks
-- [x] `PerformanceMetricsProvider` context for cross-cutting metrics
-- [x] `usePerformanceMetrics` hook for consuming TTFR
-- [x] TTFR displayed in StatusBar
-
-#### StatusBar Component
-- [x] Display TTFR (Time to First Render)
-- [x] Display bytes loaded / total bytes
-- [x] Display progress percentage with visual indicator
-- [x] Display log count
-- [x] Display loading/error status
+- [x] StatusBar: Display TTFR, bytes loaded, progress, log count, loading/error status
 - [x] Abort/Retry action buttons
 
-#### Card UI Component
+### UI Components
 - [x] Reusable Card component with theme variables
 - [x] Configurable padding (none, sm, md, lg)
 
-## 1. Architecture & Setup
+## 2. Architecture & Setup (Reference)
 
-Lightweight, performance-focused React application using Vite. Rely on custom hooks for streaming data fetching and a custom virtualization engine for rendering. Would use Tanstack Router in a real application, but skipping it here because of [acceptance criteria constraints](acceptance_criteria.md).
+Lightweight, performance-focused React application using Vite. Rely on custom hooks for streaming data fetching and a custom virtualization engine for rendering.
 
 ### Tech Stack
-
 - **Core**: React 19, TypeScript
 - **Build**: Vite
 - **Styling**: CSS Modules (scoped, zero-runtime cost styles)
 - **Testing**: Vitest + React Testing Library
-- **State/Logic**: Custom Hooks (no external state libs like Redux/Zustand)
+- **State/Logic**: Custom Hooks (no external state libs)
 
 ### Directory Structure
-
 - `src/components/`: UI components (`LogTable`, `Timeline`)
 - `src/hooks/`: Logic (`useLogStream`, `useVirtualization`, `useKeyboardNav`)
 - `src/utils/`: Helpers (`ndjsonParser`, `dateFormatter`)
 
-## 2. Key Features & Implementation
+## 3. Pending Tasks (Immediate)
 
-### A. Streaming Data & Caching
+### Documentation Cleanup
+- **README.md**:
+  - Improve "Getting Started" section.
+  - Add explicit instructions on how to run tests.
+  - Add "How It Works" section linking to module-level READMEs.
+  - Link to the Wishlist in `docs/plan.md`.
+- **Testing Docs**:
+  - Review and update `docs/testing.md`.
+- **Critical Code Documentation (Collocated)**:
+  - Create or update `README.md` files in component/hook directories:
+    - `src/hooks/useLogStream/README.md`: Streaming logic & `ndjsonParser`.
+    - `src/hooks/useVirtualization/README.md`: Virtualization engine details.
+    - `src/contexts/README.md`: Performance metrics strategy.
+    - `src/components/Timeline/README.md`: Timeline aggregation logic.
 
-**Goal**: Optimize TTFB and prevent unnecessary re-fetches
+## 4. Wishlist (Future)
 
-- Implement `useLogStream(url)`:
-  - Use `fetch` and `ReadableStream` to process chunks.
-  - Use `AbortController` for cancellation.
-  - Cache `logs` and `status` in a module-level cache or Context; if cached, serve immediately.
-  - Track loaded bytes vs total bytes for loading indicator.
-  - Surface loading state, streamed bytes, and errors with retry/cancel controls; render as chunks arrive.
-  - Graceful failure: skip bad JSON lines and keep errors in state; keep UI interactive on failures.
+These are features I would add if I had more time.
 
-### B. Virtualized Log Table
-
-**Goal**: Render thousands of logs efficiently with minimal dependencies.
-
-- Manage a scrollable container.
-- Track `scrollTop` and container height.
-- Maintain a registry of row heights (expansion changes height).
-- Render only items in `[startIndex, endIndex]`.
-- Use absolute positioning or transform translations for rows.
-- Support variable height with dynamic measurement via `useLayoutEffect`.
-- Attach `ResizeObserver` to recompute viewport height, column widths, and visible window on resize.
-- **Note**: When implementing virtualization, consider switching from fixed CSS column widths (e.g., `200px`) to dynamic JS-based sizing (using `ResizeObserver`) to handle viewport changes and responsive layouts more robustly.
-
-### C. Log Rows & Interaction
-
-- Design:
-  - Columns: `Time` (ISO), `Event` (JSON).
-  - Alternating row colors (CSS `:nth-child`).
-- Interaction:
-  - Toggle `isExpanded` on click or Enter/Space; update virtual list height map.
-  - Provide "Copy Line" / "Copy JSON" buttons in expanded view.
-  - Support keyboard navigation: `ArrowUp`/`ArrowDown` move focus; `Enter`/`Space` toggle expansion.
-  - Provide hover tooltips on truncated JSON or timeline bars with bucket/count or full value previews without expanding.
-
-### D. Timeline Component (Bonus)
-
-**Goal**: Visualize distribution of logs.
-
-- Aggregate logs by time bucket (e.g., per minute/hour) as they stream in.
-- Render a simple SVG bar chart
-- Features:
-  - X-axis: Time ranges (e.g., "2024-08-21 08:00:00").
-  - Y-axis: Log count (approximate scale).
-  - Styling: Teal bars, clean white background, minimal grid lines.
-- Keep implementation lightweight: no charting libraries; use raw SVG `rect` elements.
-
-### E. Accessibility (A11y)
-
-- Apply `role="grid"` and `aria-expanded`.
-- Ensure rows are focusable with visible outlines.
-- Make JSON content screen-reader friendly (truncate for focus view, full for detail).
-- Use `aria-live` for status bar updates (loading/errors); support keyboard shortcuts for expand/collapse and jump-to-latest.
-
-## 3. Testing Strategy (Vitest)
-
-- **Unit Tests**:
-  - `ndjsonParser`: Verify chunk splitting and JSON parsing.
-  - `useLogStream`: Mock `fetch` stream; verify state updates.
-- **Component Tests**:
-  - `VirtualList`: Verify only visible items render.
-  - `LogTable`: Verify expansion logic and keyboard navigation events.
-- **Integration**:
-  - End-to-end flow mock (stream -> parse -> render).
-
-## 4. Extra Details: Best Practices & Enhancements
-
-1. **Syntax Highlighting**: Apply simple key/value coloring in expanded JSON for readability.
-2. **Copy-to-Clipboard**: Provide a small action bar in expanded view.
-3. **Substring Search (Bonus)**: Add a lightweight filter bar before virtualization; debounce input and filter against single-line JSON strings.
-4. **Error Boundaries**: Wrap the list to catch JSON parse errors gracefully.
-5. **User Preferences**: Persist options like "Wrap Lines" or "Dark Mode" in `localStorage` if included.
-
-
-## 5. Things I'd like to add if I have extra time:
-
-- Error context for failed json lines, so they get saved and we can get them.
-- ExpandedRows context so that when you expand a row, scroll it off screen and then back to it,
-the open state is preserved. Currently it remounts in default state.
+- **Expanded Row State**:
+  - Implement a FIFO queue (max 3) to preserve expanded state of rows when they scroll off-screen and back.
+- **Enhanced Error Handling**:
+  - Capture and display context for failed JSON lines.
+  - Improve UI feedback for stream interruptions.
+- **Additional Suggestions**:
+  - **Client-side Filter/Search**: text input to filter visible logs.
+  - **Log Level Highlighting**: Visual distinction for error/warn/info if detected in JSON.
+  - **Export**: Button to download currently loaded logs as a file.
+  - **Theme Toggle**: Persist Dark/Light mode preference.

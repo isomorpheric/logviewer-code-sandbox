@@ -1,46 +1,77 @@
 # Log Viewer
 
-A minimal log viewer, focused on streaming NDJSON and fast time-to-first-byte rendering.
+A high-performance, streaming log viewer built with React 19.
 
-## Acceptance Criteria & Constraints
+## Quick Start
 
-See [docs/acceptance_criteria.md](docs/acceptance_criteria.md) for the full acceptance criteria and constraints.
+This application is optimized for **Fast Time-To-First-Byte (TTFB)** and **Time-To-First-Render (TTFR)**. To see it in its best light, I recommend running the production build.
+
+1. **Install Dependencies**
+   ```bash
+   npm install
+   ```
+
+2. **Build & Preview (Recommended)**
+   ```bash
+   npm start
+   ```
+   This runs `npm run build` followed by `npm run preview`. It serves the optimized production assets, ensuring you experience the virtualization and streaming logic as intended.
+
+   > **Note**: Open [http://localhost:4173](http://localhost:4173) (or the port shown in your terminal) to view the app.
+
+---
+
+## Development
+
+If you prefer to explore the code with hot-reloading:
+
+```bash
+npm run dev
+```
+
+## Architecture & Key Decisions
+
+This project was built with a strict focus on performance and minimal dependencies, adhering to the challenge constraints.
+
+- **No Heavy UI Frameworks**: Uses **CSS Modules** for zero-runtime overhead and scoped styling, avoiding the weight of Material UI or Tailwind.
+- **No External State Libraries**: All state is managed via **React Hooks** and **Context**. Complex logic is encapsulated in custom hooks like `useLogStream` and `useVirtualization`.
+- **Streaming First**: Data is parsed incrementally from the NDJSON stream. I do not wait for the full download; rows render as soon as bytes arrive.
+- **Custom Virtualization**: To handle thousands of logs with **variable row heights** (expanded vs. collapsed), I implemented a lightweight virtualization engine from scratch.
+
+### Deep Dive Documentation
+
+- **[Streaming Logic](src/hooks/useLogStream/README.md)**: How I fetch, chunk, and parse NDJSON.
+- **[Virtualization Engine](src/hooks/useVirtualization/README.md)**: Implementation of the variable-height scroll container.
+- **[Performance Metrics](src/contexts/README.md)**: How I track and display TTFR.
+- **[Timeline Visualization](src/components/Timeline/README.md)**: Aggregation strategy for the bar chart.
 
 ## Features
 
-- Streaming hook `useLogStream` with incremental NDJSON parsing, abort/retry, and progress.
-- Virtualized `LogTable` with variable row heights, keyboard navigation, and copy actions.
-- ISO 8601 formatting via a shared `dateFormatter`; JSON output uses `JSON.stringify`.
-- Optional timeline view to visualize log volume over time (SVG, no chart libs).
-- Accessibility: grid semantics, focusable rows, `aria-live` status updates.
+- **Performance**: Instant rendering of incoming data; low memory footprint.
+- **UX**: Two-column layout (Time/Event), expandable rows with pretty-printed JSON, and keyboard navigation.
+- **Visualization**: Timeline view showing log distribution over time.
+- **Accessibility**: Semantic grid roles, focus management, and ARIA attributes.
+- **Resilience**: Graceful handling of network errors and malformed JSON lines.
 
-## Tech Stack
-
-- Build: Vite
-- Language: TypeScript
-- UI: React 19
-- Styling: CSS Modules
-- Tests: Vitest + React Testing Library
-
-## Getting Started
-
-```bash
-npm install
-npm run dev       # start dev server
-npm run test      # run unit tests
-npm run build     # production build
-npm run preview   # preview production build
-```
-
-## Linting & Formatting
-
-We use [Biome](https://biomejs.dev/) for linting, formatting, and import sorting.
-
-```bash
-npm run lint        # Check for lint/format issues
-npm run lint:fix    # Fix auto-fixable issues (format, sort imports, safe lint fixes)
-```
+See [docs/acceptance_criteria.md](docs/acceptance_criteria.md) for the full requirements.
 
 ## Testing
 
-See [docs/testing.md](docs/testing.md) for test coverage and strategy.
+I use **Vitest** and **React Testing Library**. The suite covers unit logic (parsers), component interactions, and integration flows.
+
+```bash
+npm run test        # Run all tests
+npm run test:ui     # Open the Vitest UI
+npm run coverage    # Generate coverage report
+```
+
+Refer to [docs/testing.md](docs/testing.md) for the detailed strategy.
+
+## Trade-offs & Future Wishlist
+
+Given more time, I would implement:
+- **Preserved Expansion State**: A FIFO queue to remember which rows were expanded after they scroll off-screen.
+- **Advanced Filtering**: Client-side text search or log-level filtering.
+- **E2E Tests**: Playwright setup for full browser scrolling scenarios.
+
+See the [Wishlist in docs/plan.md](docs/plan.md#4-wishlist-future) for a complete list.

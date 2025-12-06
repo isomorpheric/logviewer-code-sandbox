@@ -3,7 +3,7 @@ import { LogTable } from "@/components/LogTable";
 import { StatusBar } from "@/components/StatusBar";
 import { Timeline } from "@/components/Timeline";
 import { ErrorFallback } from "@/components/ui/ErrorFallback";
-import { PerformanceMetricsProvider } from "@/contexts";
+import { PerformanceMetricsProvider } from "@/contexts/PerformanceMetrics";
 import { useLogStream } from "@/hooks";
 import styles from "./App.module.css";
 

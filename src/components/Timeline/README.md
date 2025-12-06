@@ -1,31 +1,29 @@
 # Timeline Component
 
 > [!IMPORTANT]
-> In a real production application, I would have likely leaned on a charting library for the rendering. The logic to create the buckets would require only minimal refactor, if any.
+> In a real production application, I would have likely leaned on a charting library for the component ui, the core functions however would remain mostly the same.
 
-Bar chart showing log event distribution over time.
 
-## Usage
+## Overview
 
-```tsx
-<Timeline logs={logs} bucketCount={8} height={120} />
-```
+The `Timeline` component visualizes the distribution of log events over time using a lightweight SVG bar chart. It allows users to quickly spot bursts of activity or silence.
 
-## How It Works
+## Implementation Details
 
-```
-logs → getTimeRange() → createTimeBuckets() → assignLogsToBuckets() → render bars
-```
+### Aggregation
 
-1. Extract min/max timestamps from logs
-2. Divide time range into equal buckets
-3. Count logs per bucket
-4. Render bars scaled to max count
+- **Input**: Receives the full array of `LogEntry` objects.
+- **Bucketing**: Iterates through logs and groups them into time buckets (e.g., 1 minute or computed dynamic intervals based on the total time range).
+- **Normalization**: Finds the maximum count in any bucket to scale the Y-axis height of the bars relative to the container height.
 
-## Pure Functions (exported for testing)
+### Rendering
 
-- `getTimeRange()` - Extract min/max timestamps
-- `createTimeBuckets()` - Generate evenly-spaced time intervals
-- `assignLogsToBuckets()` - Count logs per bucket
-- `calculateYAxisTicks()` - Generate axis labels
-- `formatAxisTime()` - Format timestamps as `YYYY-MM-DD HH:MM:SS`
+- **SVG**: Uses raw `<svg>` and `<rect>` elements. This avoids the heavy bundle size of charting libraries (like D3, Chart.js, or Recharts).
+- **Responsiveness**: The SVG scales via CSS, but the bucket calculation might re-run if the time range changes significantly.
+- **Interactivity**:
+  - Hovering over a bar displays a tooltip with the time range and log count (via `TimelineTooltip`).
+
+## Performance Considerations
+
+- The aggregation is memoized (`useMemo`) to prevent recalculation on every render unless the logs array changes.
+- Rendering hundreds of `<rect>` elements is generally performant, but the number of buckets is limited (e.g., to the pixel width of the container or a fixed number like 60-100) to avoid DOM bloat.

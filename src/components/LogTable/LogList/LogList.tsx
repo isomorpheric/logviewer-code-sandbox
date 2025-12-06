@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef } from "react";
 import { LoadingSkeleton } from "@/components/ui/LoadingSkeleton";
-import { usePerformanceMetrics } from "@/contexts";
+import { usePerformanceMetrics } from "@/contexts/PerformanceMetrics";
 import { useVirtualization } from "@/hooks";
 import type { LogEntry } from "@/types";
 import { LogRow } from "../LogRow";

@@ -1,5 +1,5 @@
 import { Card } from "@/components/ui/Card";
-import { usePerformanceMetrics } from "@/contexts";
+import { usePerformanceMetrics } from "@/contexts/PerformanceMetrics";
 import styles from "./StatusBar.module.css";
 
 interface StatusBarProps {
