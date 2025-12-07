@@ -1,4 +1,9 @@
-# Log Viewer
+# Log Viewer (PREVIEW EDITION)
+
+>[!IMPORTANT]
+> I'm experiencing a [bug with code sandbox where the "share" url is not updating with main](https://github.com/codesandbox/codesandbox-client/issues/8689). I've tried re-importing the repo into csb, reseting main branch, using another branch within the repo - and none of that has worked. I believe this is due to me making the sandbox while the repo was private, then I switched it to public.
+>
+> **🔗 Here is a [link to the original repo](https://github.com/codesandbox/codesandbox-client/issues/8689).**
 
 A high-performance, streaming log viewer built with React. It streams in logs and renders them in a virtualized table, with optimizations for TTFB and TTFR (for the row).
 
