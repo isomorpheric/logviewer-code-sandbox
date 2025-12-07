@@ -4,10 +4,6 @@
     {
       "command": "npm install",
       "name": "Installing Dependencies"
-    },
-    {
-      "command": "npm run test:run",
-      "name": "Running Tests"
     }
   ],
 
