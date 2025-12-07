@@ -1,6 +1,12 @@
 import { act, renderHook, waitFor } from "@testing-library/react";
+import type { ReactNode } from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { PerformanceMetricsProvider } from "@/contexts/performanceMetrics";
 import { useLogStream } from "./useLogStream";
+
+const wrapper = ({ children }: { children: ReactNode }) => (
+  <PerformanceMetricsProvider>{children}</PerformanceMetricsProvider>
+);
 
 describe("useLogStream", () => {
   beforeEach(() => {
@@ -34,7 +40,7 @@ describe("useLogStream", () => {
 
     vi.mocked(fetch).mockResolvedValue(mockStreamResponse(chunks) as unknown as Response);
 
-    const { result } = renderHook(() => useLogStream("http://test.com"));
+    const { result } = renderHook(() => useLogStream("http://test.com"), { wrapper });
 
     expect(result.current.isLoading).toBe(true);
 
@@ -52,7 +58,7 @@ describe("useLogStream", () => {
 
     vi.mocked(fetch).mockResolvedValue(mockStreamResponse(chunks) as unknown as Response);
 
-    const { result } = renderHook(() => useLogStream("http://test.com"));
+    const { result } = renderHook(() => useLogStream("http://test.com"), { wrapper });
 
     await waitFor(() => {
       expect(result.current.logs).toHaveLength(1);
@@ -64,7 +70,7 @@ describe("useLogStream", () => {
   it("handles fetch error", async () => {
     vi.mocked(fetch).mockRejectedValue(new Error("Network error"));
 
-    const { result } = renderHook(() => useLogStream("http://test.com"));
+    const { result } = renderHook(() => useLogStream("http://test.com"), { wrapper });
 
     await waitFor(() => {
       expect(result.current.error).toBeTruthy();
@@ -87,7 +93,7 @@ describe("useLogStream", () => {
       headers: new Headers(),
     } as unknown as Response);
 
-    const { result, unmount } = renderHook(() => useLogStream("http://test.com"));
+    const { result, unmount } = renderHook(() => useLogStream("http://test.com"), { wrapper });
 
     expect(result.current.isLoading).toBe(true);
 

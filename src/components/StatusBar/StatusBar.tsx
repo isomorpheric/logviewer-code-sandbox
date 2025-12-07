@@ -1,5 +1,5 @@
 import { Card } from "@/components/ui/Card";
-import { usePerformanceMetrics } from "@/contexts/PerformanceMetrics";
+import { usePerformanceMetrics } from "@/contexts/performanceMetrics";
 import { Button } from "../ui/Button";
 import styles from "./StatusBar.module.css";
 import StatusBarSkeleton from "./StatusBarSkeleton";

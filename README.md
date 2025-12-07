@@ -43,12 +43,13 @@ This project was built with a strict focus on performance and minimal dependenci
 - **No External State Libraries**: All state is managed via **React Hooks** and **Context**. Complex logic is encapsulated in custom hooks like `useLogStream`.
 - **Streaming First**: Data is parsed incrementally from the NDJSON stream. I do not wait for the full download; rows render as soon as bytes arrive.
 - **Virtualization**: To handle thousands of logs with **variable row heights** (expanded vs. collapsed), I use **TanStack Virtual**. I initially built a custom engine but migrated for better stability and performance (see [ADR](src/hooks/useVirtualization/README.md)).
+- **Precision Metrics**:  Real-time TTFB and TTFR tracking using the browser's Performance API
 
 ### Deep Dive Documentation
 
 - **[Streaming Logic](src/hooks/useLogStream)**: How I fetch, chunk, and parse NDJSON.
 - **[Virtualization Decision](src/hooks/useVirtualization)**: Why I switched from custom virtualization to TanStack Virtual.
-- **[Performance Metrics](src/contexts/PerformanceMetrics)**: How I track and display TTFR.
+- **[Performance Metrics](src/lib/performanceMetrics)**: How I track and display TTFR.
 - **[Timeline Visualization](src/components/Timeline)**: Aggregation strategy for the bar chart.
 
 ## Features

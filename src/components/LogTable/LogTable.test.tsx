@@ -1,6 +1,6 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
-import { PerformanceMetricsProvider } from "@/contexts/PerformanceMetrics";
+import { PerformanceMetricsProvider } from "@/contexts/performanceMetrics";
 import type { LogEntry } from "@/types";
 import { LogTable } from "./LogTable";
 

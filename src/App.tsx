@@ -1,4 +1,4 @@
-import { PerformanceMetricsProvider } from "@/contexts/PerformanceMetrics";
+import { PerformanceMetricsProvider } from "@/contexts/performanceMetrics";
 import { LogViewer } from "./views/LogViewer";
 
 function App() {

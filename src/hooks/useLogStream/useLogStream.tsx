@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
+import { usePerformanceMetrics } from "@/contexts/performanceMetrics";
 import type { LogEntry } from "@/types";
-import { perf } from "@/utils";
 import { parseNDJSONChunk } from "./ndjsonParser";
 
 interface UseLogStreamResult {
@@ -23,6 +23,8 @@ interface UseLogStreamResult {
  * @returns An object containing the logs, loading state, error, loaded bytes, total bytes, abort function, retry function, and is complete state.
  */
 export function useLogStream(url: string): UseLogStreamResult {
+  const { markFetchStart, markFirstByte } = usePerformanceMetrics();
+
   const [logs, setLogs] = useState<LogEntry[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
@@ -41,7 +43,7 @@ export function useLogStream(url: string): UseLogStreamResult {
     const controller = new AbortController();
     abortControllerRef.current = controller;
 
-    perf.start();
+    markFetchStart();
     setIsLoading(true);
     setError(null);
     setLoadedBytes(0);
@@ -51,7 +53,7 @@ export function useLogStream(url: string): UseLogStreamResult {
     bufferRef.current = "";
 
     return controller;
-  }, []);
+  }, [markFetchStart]);
 
   const fetchLogStream = useCallback(
     async (signal: AbortSignal): Promise<ReadableStreamDefaultReader<Uint8Array>> => {
@@ -116,7 +118,7 @@ export function useLogStream(url: string): UseLogStreamResult {
         if (done) break;
 
         if (isFirstChunk) {
-          perf.firstByte();
+          markFirstByte();
           isFirstChunk = false;
         }
 
@@ -125,7 +127,7 @@ export function useLogStream(url: string): UseLogStreamResult {
         processChunk(chunk);
       }
     },
-    [processChunk]
+    [markFirstByte, processChunk]
   );
 
   const streamLogs = useCallback(async () => {

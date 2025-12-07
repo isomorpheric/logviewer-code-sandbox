@@ -1,6 +1,6 @@
 import { useVirtualizer } from "@tanstack/react-virtual";
 import { useEffect, useRef } from "react";
-import { usePerformanceMetrics } from "@/contexts/PerformanceMetrics";
+import { usePerformanceMetrics } from "@/contexts/performanceMetrics";
 import type { LogEntry } from "@/types";
 import { LogRow } from "../LogRow";
 import styles from "./LogList.module.css";
@@ -19,7 +19,7 @@ interface Props {
  * (TTFB/TTFR) when the first logs are rendered.
  */
 export const LogList = ({ logs, isLoading = false }: Props) => {
-  const { recordFirstByte, recordFirstRender } = usePerformanceMetrics();
+  const { markFirstByte, markFirstRender } = usePerformanceMetrics();
   const hasRecordedMetrics = useRef(false);
   const parentRef = useRef<HTMLDivElement>(null);
 
@@ -33,10 +33,10 @@ export const LogList = ({ logs, isLoading = false }: Props) => {
   useEffect(() => {
     if (logs.length > 0 && !hasRecordedMetrics.current) {
       hasRecordedMetrics.current = true;
-      recordFirstByte();
-      recordFirstRender();
+      markFirstByte();
+      markFirstRender();
     }
-  }, [logs.length, recordFirstByte, recordFirstRender]);
+  }, [logs.length, markFirstByte, markFirstRender]);
 
   const showSkeleton = isLoading && logs.length === 0;
 
